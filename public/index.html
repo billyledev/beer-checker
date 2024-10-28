@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beer-Checker</title>
+  <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+  <style>
+    .photoPreview {
+        width: 100vw;
+        height: auto;
+        display: block;
+    }
+  </style>
+</head>
+<body>
+    <div>
+        <div>
+            <input id="captureInput" type="file" accept="image/*" capture="environment">
+        </div>
+        <div id="">
+
+        </div>
+        <img id="photo" class="photoPreview"/>
+    </div>
+
+    <script>
+
+        const imageInputHandler = async (e) => {
+            const photo = document.getElementById('photo');
+            photo.src = URL.createObjectURL(e.srcElement.files[0]);
+
+            const worker = await Tesseract.createWorker('eng');
+            const { data: { text } } = await worker.recognize(photo);
+            await worker.terminate();
+
+            const linesFromImage = text.split("\n");
+            let biers = [];
+
+            for (const line of linesFromImage) {
+                if (line) {
+                    const lineClean = line.trim().replace(/^[^\w\d]+|[^\w\d]+$/g, '').trim();
+                    biers.push(lineClean);
+                }
+            }
+
+            for (const bier of biers) {
+                console.log(bier);
+            }
+        }
+
+        document.getElementById("captureInput").addEventListener("input", imageInputHandler);
+       
+    </script>
+</body>
+</html>

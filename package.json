@@ -1,0 +1,11 @@
+{
+  "name": "beer-checker",
+  "version": "1.0.0",
+  "description": "Beer checker app",
+  "main": "app.js",
+  "scripts": {
+    "start" : "node app.js"
+  },
+  "author": "gox",
+  "license": "ISC"
+}
