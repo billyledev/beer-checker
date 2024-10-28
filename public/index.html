@@ -7,7 +7,7 @@
   <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
   <style>
     .photoPreview {
-        width: 100vw;
+        width: 70%;
         height: auto;
         display: block;
     }
@@ -18,7 +18,7 @@
         <div>
             <input id="captureInput" type="file" accept="image/*" capture="environment">
         </div>
-        <div id="">
+        <div id="result">
 
         </div>
         <img id="photo" class="photoPreview"/>
@@ -28,25 +28,41 @@
 
         const imageInputHandler = async (e) => {
             const photo = document.getElementById('photo');
-            photo.src = URL.createObjectURL(e.srcElement.files[0]);
-
+            const photoFile = e.srcElement.files[0];
+            
+            document.getElementById('result').innerHTML = "Processing image..."
             const worker = await Tesseract.createWorker('eng');
-            const { data: { text } } = await worker.recognize(photo);
+            const { data: { text } } = await worker.recognize(photoFile);
             await worker.terminate();
 
-            const linesFromImage = text.split("\n");
-            let biers = [];
+            document.getElementById('result').innerHTML = "";
+            photo.src = URL.createObjectURL(photoFile);
+            
+            const bieresLines = text.split(/\r?\n/);
+            console.log(bieresLines);
 
-            for (const line of linesFromImage) {
-                if (line) {
-                    const lineClean = line.trim().replace(/^[^\w\d]+|[^\w\d]+$/g, '').trim();
-                    biers.push(lineClean);
-                }
-            }
+            const bieres = bieresLines
+                .filter(biere => biere !== '')
+                .map(biere => biere.replace(/\s*\d+°?\d*\s*.*$/g, '')
+                                    .replace(/[^\w\s']/g, '')
+                                    .trim()
+                );
+            console.log(bieres);
 
-            for (const bier of biers) {
-                console.log(bier);
-            }
+            const response = await fetch("http://localhost:3000/rateBeer", {
+                method: "POST",
+                mode:  'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    
+                },
+                body: JSON.stringify({
+                    query: bieres[0]
+                })
+            });
+
+            console.log(response.status);
+            console.log(await response.json());
         }
 
         document.getElementById("captureInput").addEventListener("input", imageInputHandler);
