@@ -1,5 +1,14 @@
 .photoPreview {
-    width: 70%;
+    width: 50%;
     height: auto;
     display: block;
+}
+
+.hiddenDiv {
+    display: none;
+}
+
+.beerPhoto {
+    width: auto;
+    height: 64px;
 }
