@@ -4,69 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Beer-Checker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
   <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
-  <style>
-    .photoPreview {
-        width: 70%;
-        height: auto;
-        display: block;
-    }
-  </style>
 </head>
 <body>
-    <div>
-        <div>
+    <div class="container">
+        <div class="container">
             <input id="captureInput" type="file" accept="image/*" capture="environment">
         </div>
-        <div id="result">
-
+        <div id="result" class="container">
         </div>
         <img id="photo" class="photoPreview"/>
     </div>
 
-    <script>
-
-        const imageInputHandler = async (e) => {
-            const photo = document.getElementById('photo');
-            const photoFile = e.srcElement.files[0];
-            
-            document.getElementById('result').innerHTML = "Processing image..."
-            const worker = await Tesseract.createWorker('eng');
-            const { data: { text } } = await worker.recognize(photoFile);
-            await worker.terminate();
-
-            document.getElementById('result').innerHTML = "";
-            photo.src = URL.createObjectURL(photoFile);
-            
-            const bieresLines = text.split(/\r?\n/);
-            console.log(bieresLines);
-
-            const bieres = bieresLines
-                .filter(biere => biere !== '')
-                .map(biere => biere.replace(/\s*\d+°?\d*\s*.*$/g, '')
-                                    .replace(/[^\w\s']/g, '')
-                                    .trim()
-                );
-            console.log(bieres);
-
-            const response = await fetch("http://localhost:3000/rateBeer", {
-                method: "POST",
-                mode:  'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                    
-                },
-                body: JSON.stringify({
-                    query: bieres[0]
-                })
-            });
-
-            console.log(response.status);
-            console.log(await response.json());
-        }
-
-        document.getElementById("captureInput").addEventListener("input", imageInputHandler);
-       
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
 </body>
 </html>
