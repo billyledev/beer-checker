@@ -1,4 +1,3 @@
-
 const buildRateBeerApiRequest = (query) => {
     return {
         "operationName": "SearchResultsBeer",
@@ -16,14 +15,14 @@ const buildRateBeerApiRequest = (query) => {
     };
 };
 
-module.exports = async (req, res) => {
-    const requestBody = JSON.stringify(buildRateBeerApiRequest(req.body.query));
+export default async (req, res) => {
+    const requestBody = buildRateBeerApiRequest(req.body.query);
     const response = await fetch("https://beta.ratebeer.com/v1/api/graphql", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',  
         },
-        body: requestBody
+        body: JSON.stringify(requestBody)
     });
 
     console.log("RateBeer API status", response.status);

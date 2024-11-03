@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Beer checker app",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "node --env-file=.env app.js"
   },
-  "author": "gox",
+  "author": "gox1337",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.3",
     "express": "^4.21.1",
     "nodemon": "^3.1.7",
     "openai": "^4.70.2"
