@@ -22,10 +22,10 @@ const extractBeerNamesFromImage = async (base64Image) => {
             },
         ]
     });
-    return response.choices[0].message.content;
+    return JSON.parse(response.choices[0].message.content.slice(7, -3));
 }
 
 export default async (req, res) => {
     const beerNames = await extractBeerNamesFromImage(req.body.image);
-    res.json(JSON.parse(beerNames.slice(7, -3)));
+    res.json(beerNames);
 }
