@@ -58,12 +58,12 @@ const imageInputHandler = async (event) => {
     
         const jsonResp = await response.json();
         console.log(beerName, jsonResp);
-        appendBiersInTable(beerName, jsonResp.data.results.items);
+        appendBeersInTable(beerName, jsonResp.data.results.items);
     }
 }
 
-const appendBiersInTable = (beerName, beers) => {
-    const tableBody = document.getElementById('biersTable').getElementsByTagName('tbody')[0];
+const appendBeersInTable = (beerName, beers) => {
+    const tableBody = document.getElementById('beersTable').getElementsByTagName('tbody')[0];
     if (!beers) {
         return;
     }
