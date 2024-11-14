@@ -1,9 +1,9 @@
+@import './base.css';
+@import 'primeicons/primeicons.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import './base.css';
-@import 'primeicons/primeicons.css';
 
 #app {
   max-width: 1280px;
